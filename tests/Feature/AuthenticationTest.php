@@ -10,6 +10,7 @@ use Database\Seeders\UserSeeder;
 
 class AuthenticationTest extends TestCase
 {
+    use RefreshDatabase;
 
     public function test_login_page()
     {
@@ -18,12 +19,12 @@ class AuthenticationTest extends TestCase
             ->assertStatus(200);
     }
 
-    // public function test_login_success()
-    // {
-    //     $this->seed([UserSeeder::class]);
-    //     $this->post(route('login'), [
-    //        'user' => 'user1@example.com',
-    //         'password' => 'password'
-    //     ])->assertRedirectToRoute('home');
-    // }
+    public function test_login_success()
+    {
+        $this->seed([UserSeeder::class]);
+        $this->post(route('login'), [
+            'email' => 'user1@example.com',
+            'password' => 'password'
+        ])->assertRedirectToRoute('home');
+    }
 }
