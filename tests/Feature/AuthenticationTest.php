@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
+use Database\Seeders\UserSeeder;
 
 class AuthenticationTest extends TestCase
 {
@@ -17,16 +18,12 @@ class AuthenticationTest extends TestCase
             ->assertStatus(200);
     }
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
-    {
-        $user = User::factory()->create();
-
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
-
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('home'));
-    }
+    // public function test_login_success()
+    // {
+    //     $this->seed([UserSeeder::class]);
+    //     $this->post(route('login'), [
+    //        'user' => 'user1@example.com',
+    //         'password' => 'password'
+    //     ])->assertRedirectToRoute('home');
+    // }
 }

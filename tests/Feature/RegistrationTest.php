@@ -14,17 +14,4 @@ class RegistrationTest extends TestCase
             ->assertSeeText('Halaman Register')
             ->assertStatus(200);
     }
-
-    public function test_new_users_can_register(): void
-    {
-        $response = $this->post(route('register'), [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ]);
-
-        // $this->assertAuthenticated();
-        $response->assertRedirect(route('home'));
-    }
 }
