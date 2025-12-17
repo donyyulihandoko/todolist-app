@@ -23,7 +23,7 @@ class LoginTest extends TestCase
         $this->post(route('login'), [
             'email' => $user->email,
             'password' => 'password'
-        ])->assertRedirect('/home');
+        ])->assertRedirect('/');
     }
 
     public function test_user_login_failed_empty_field()

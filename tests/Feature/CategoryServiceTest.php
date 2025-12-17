@@ -18,7 +18,7 @@ class CategoryServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        DB::table('categories')->truncate();
+        // DB::table('categories')->truncate();
         $this->categoryService = $this->app->make(CategoryService::class);
     }
 

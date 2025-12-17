@@ -2,17 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CategoryService;
+use App\Services\TodolistService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class TodolistController extends Controller
 {
+    private TodolistService $todolistService;
+    private CategoryService $categoryService;
+
+    public function __construct(TodolistService $todolistService, CategoryService $categoryService)
+    {
+        $this->todolistService = $todolistService;
+        $this->categoryService = $categoryService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
-        return response()->view('todolist.index');
+        $todolist = $this->todolistService->getTodolists();
+        return response()->view('todolist.index', [
+            'title' => 'Halaman Todolist',
+            'todolist' => $todolist
+        ]);
     }
 
     /**
