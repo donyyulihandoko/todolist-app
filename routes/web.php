@@ -6,4 +6,4 @@ use App\Http\Controllers\TodolistController;
 
 Route::get('/', [HomeController::class, 'dashboard'])->middleware('auth');
 
-Route::resource('todolist', TodolistController::class);
+Route::resource('todolist', TodolistController::class)->middleware('auth');

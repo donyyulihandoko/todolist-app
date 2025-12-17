@@ -28,7 +28,7 @@ class RegistationTest extends TestCase
 
         $this->post(route('register'), $data)
             ->assertStatus(302)
-            ->assertRedirect('/home');
+            ->assertRedirect('/');
     }
 
     public function test_register_new_user_failed_empty_field()
