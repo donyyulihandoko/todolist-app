@@ -2,27 +2,29 @@
 
 namespace App\Providers;
 
-use App\Services\CategoryService;
-use App\Services\Impl\CategoryServiceImpl;
+use App\Services\Impl\TodolistServiceImpl;
+use App\Services\TodolistService;
 use Illuminate\Support\ServiceProvider;
 
-class CategoryServiceProvider extends ServiceProvider
+class TodolistServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
      */
     public function register(): void
     {
-        $this->app->singleton(CategoryService::class, function ($app) {
-            return new CategoryServiceImpl();
+        $this->app->singleton(TodolistService::class, function ($app) {
+            return new TodolistServiceImpl();
         });
     }
+
     public function provides(): array
     {
         return [
-            CategoryService::class
+            TodolistService::class
         ];
     }
+
     /**
      * Bootstrap services.
      */
