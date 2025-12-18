@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Services\TodolistService;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\TodolistSeeder;
@@ -54,5 +55,46 @@ class TodolistServiceTest extends TestCase
             $this->assertEquals(1, $todo->category_id);
             $this->assertEquals('description test todo', $todo->description);
         }
+    }
+
+    public function test_get_todolists_by_id()
+    {
+        $this->seed([CategorySeeder::class, TodolistSeeder::class]);
+        $todolist =  $this->todolistService->getTodolistById(1);
+        $this->assertEquals(1, $todolist->id);
+    }
+
+    public function test_update_todolist()
+    {
+        $this->seed([CategorySeeder::class, TodolistSeeder::class]);
+
+        $data = [
+            'todo' => 'test todo update',
+            'category_id' => 1,
+            'description' => 'description test todo update'
+        ];
+
+        $this->todolistService->updateTodolist(1, $data);
+
+        $todolist = $this->todolistService->getTodolistById(1);
+
+        $this->assertEquals('test todo update', $todolist->todo);
+        $this->assertEquals(1, $todolist->category_id);
+        $this->assertEquals('description test todo update', $todolist->description);
+    }
+
+    public function test_remove_todolist()
+    {
+        $data = [
+            'todo' => 'test todo',
+            'category_id' => 1,
+            'description' => 'description test todo'
+        ];
+
+        $this->todolistService->saveTodolist($data);
+        $this->todolistService->removeTodolist(1);
+        $todolist = $this->todolistService->getTodolists();
+
+        $this->assertEquals(0, sizeof($todolist));
     }
 }
