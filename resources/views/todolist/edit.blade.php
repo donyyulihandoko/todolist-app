@@ -5,7 +5,7 @@
             <div class="col-sm-12 col-xl-6">
                 <div class="bg-secondary rounded h-100 p-4">
                     <h6 class="mb-4">Edit Todolist</h6>
-                    <form action="{{ url("/todolist/$todolist->id/update") }}" method="POST">
+                    <form action="{{ route('todolist.update', $todolist->id) }}" method="POST">
                         @csrf @method('PUT')
                         <div class=" mb-3">
                             <label for="todo" class="form-label">Todo</label>

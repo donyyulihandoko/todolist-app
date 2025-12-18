@@ -24,7 +24,7 @@
                             @endphp
                             @foreach ($todolist as $todo)
                                 <tr>
-                                    <th scope="row">{{ $todo->id }}</th>
+                                    <th scope="row">{{ $a++ }}</th>
                                     <td>{{ $todo->todo }}</td>
                                     <td>{{ $todo->category->name }}</td>
                                     <td>{{ $todo->description }}</td>
@@ -33,7 +33,8 @@
                                                 class="bi bi-pencil">Edit</i></a>
                                         <form action="{{ route('todolist.destroy', $todo->id) }}" method="POST">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-danger m-2"><i
+                                            <button type="submit" class="btn btn-danger m-2" id="deleteButton"
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"><i
                                                     class="bi bi-trash">Delete</i></button>
                                         </form>
                                     </td>
