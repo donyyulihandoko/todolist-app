@@ -19,4 +19,13 @@ class TodolistControllerTest extends TestCase
             ->assertStatus(200)
             ->assertSeeText('Halaman Todolist');
     }
+
+    public function test_create()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->get(route('todolist.create'))
+            ->assertStatus(200)
+            ->assertSeeText('Create Todolist');
+    }
 }

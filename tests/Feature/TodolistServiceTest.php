@@ -20,6 +20,7 @@ class TodolistServiceTest extends TestCase
     {
         parent::setUp();
         DB::table('todolists')->truncate();
+        $this->seed([CategorySeeder::class]);
         $this->todolistService = $this->app->make(TodolistService::class);
     }
 
@@ -34,5 +35,24 @@ class TodolistServiceTest extends TestCase
         $todolist = $this->todolistService->getTodolists();
         self::assertNotNull($todolist);
         self::assertEquals(9, sizeof($todolist));
+    }
+
+    public function testSaveTodolist()
+    {
+        $data = [
+            'todo' => 'test todo',
+            'category_id' => 1,
+            'description' => 'description test todo'
+        ];
+
+        $this->todolistService->saveTodolist($data);
+        $todolist = $this->todolistService->getTodolists();
+
+        $this->assertNotNull($todolist);
+        foreach ($todolist as $todo) {
+            $this->assertEquals('test todo', $todo->todo);
+            $this->assertEquals(1, $todo->category_id);
+            $this->assertEquals('description test todo', $todo->description);
+        }
     }
 }
