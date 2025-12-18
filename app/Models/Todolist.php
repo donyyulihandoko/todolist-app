@@ -12,7 +12,7 @@ class Todolist extends Model
     use HasFactory;
 
     protected $table = 'todolists';
-    protected $guarded = ['id'];
+    // protected $guarded = ['id'];
     public $fillable = ['todo', 'description', 'category_id'];
 
     public function category(): BelongsTo
