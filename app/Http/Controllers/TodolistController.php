@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TodolistRequest;
+use App\Models\Todolist;
 use App\Services\CategoryService;
 use App\Services\TodolistService;
 use Illuminate\Http\RedirectResponse;
@@ -46,15 +48,15 @@ class TodolistController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(TodolistRequest $request): RedirectResponse
     {
         $this->todolistService->saveTodolist($request->only([
-            'name',
+            'todo',
             'description',
             'category_id'
         ]));
 
-        return redirect()->route('todolist.index');
+        return response()->redirectToRoute('todolist.index');
     }
 
     /**
@@ -68,24 +70,49 @@ class TodolistController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(int $id): Response
     {
-        //
+        $todolist = $this->todolistService->getTodolistById($id);
+        $categories = $this->categoryService->getCategories();
+
+        return response()->view('todolist.edit', [
+            'title' => 'Hamalan Edit Todolist',
+            'todolist' => $todolist,
+            'categories' => $categories
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TodolistRequest $request, int $id): RedirectResponse
     {
-        //
+        $this->todolistService->updateTodolist($id, $request->only([
+            'todo',
+            'description',
+            'category_id'
+        ]));
+
+        // $todo = Todolist::find($id);
+        // $todo->update([
+        //     'todo' => $request->input('todo'),
+        //     'category_id' => $request->input('category_id'),
+        //     'description' => $request->input('description'),
+        // ]);
+
+        return response()->redirectToRoute('todolist.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        // $todo = Todolist::find($id);
+        // $todo->delete();
+
+        $this->todolistService->removeTodolist($id);
+
+        return response()->redirectToRoute('todolist.index');
     }
 }

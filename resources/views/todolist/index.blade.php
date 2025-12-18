@@ -4,6 +4,9 @@
         <div class="col-12">
             <div class="bg-secondary rounded h-100 p-4">
                 <h6 class="mb-4">Todolist</h6>
+                <div class="mb-4">
+                    <a href="{{ route('todolist.create') }}" class="btn btn-success">Create</a>
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -21,15 +24,17 @@
                             @endphp
                             @foreach ($todolist as $todo)
                                 <tr>
-                                    <th scope="row">{{ $a++ }}</th>
+                                    <th scope="row">{{ $todo->id }}</th>
                                     <td>{{ $todo->todo }}</td>
                                     <td>{{ $todo->category->name }}</td>
                                     <td>{{ $todo->description }}</td>
                                     <td>
-                                        <a href="" class="btn btn-primary m-2"><i class="bi bi-pencil"></i></a>
-                                        <form action="">
+                                        <a href="{{ route('todolist.edit', $todo->id) }}" class="btn btn-warning m-2"><i
+                                                class="bi bi-pencil">Edit</i></a>
+                                        <form action="{{ route('todolist.destroy', $todo->id) }}" method="POST">
+                                            @csrf @method('DELETE')
                                             <button type="submit" class="btn btn-danger m-2"><i
-                                                    class="bi bi-trash"></i></button>
+                                                    class="bi bi-trash">Delete</i></button>
                                         </form>
                                     </td>
 
