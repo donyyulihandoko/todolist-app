@@ -12,7 +12,7 @@
                             <input type="text" class="form-control" id="todo" name="todo"
                                 aria-describedby="emailHelp">
                             @error('todo')
-                                {{ $message }}
+                                <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class=" mb-3">
@@ -23,10 +23,16 @@
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
+                            @error('category_id')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">Descriptyion</label>
                             <textarea class="form-control" placeholder="Description" id="description" name="description" style="height: 150px;"></textarea>
+                            @error('description')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
