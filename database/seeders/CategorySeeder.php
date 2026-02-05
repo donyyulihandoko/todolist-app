@@ -15,8 +15,8 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('categories')->truncate();
         Schema::disableForeignKeyConstraints();
+        DB::table('categories')->truncate();
 
         for ($i = 1; $i < 10; $i++) {
             Category::query()->create([

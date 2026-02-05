@@ -34,7 +34,7 @@
                                         <form action="{{ route('todolist.destroy', $todo->id) }}" method="POST">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="btn btn-danger m-2" id="deleteButton"
-                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"><i
+                                                onclick="return(confirm('Hapus data ini?'))"><i
                                                     class="bi bi-trash">Delete</i></button>
                                         </form>
                                     </td>
