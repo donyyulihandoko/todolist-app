@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TodolistRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Todolist;
 use App\Services\CategoryService;
 use App\Services\TodolistService;
@@ -10,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsRedirected;
+use Illuminate\Support\Facades\Log;
 
 class TodolistController extends Controller
 {
@@ -50,6 +52,10 @@ class TodolistController extends Controller
      */
     public function store(TodolistRequest $request): RedirectResponse
     {
+        Log::info('store data todolist', [
+            'user_id' => Auth::user()->id,
+            'data' => $request->all()
+        ]);
         $this->todolistService->saveTodolist($request->only([
             'todo',
             'description',
@@ -57,6 +63,11 @@ class TodolistController extends Controller
         ]));
 
         return response()->redirectToRoute('todolist.index');
+        // if ($store) {
+        //     return response()->redirectToRoute('todolist.index');
+        // } else {
+        //     return response()->redirectToAction(TodolistController::class, 'create');
+        // }
     }
 
     /**
