@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="row g-4">
+        @include('layouts.partials.alert')
         <div class="col-12">
             <div class="bg-secondary rounded h-100 p-4">
                 <h6 class="mb-4">Todolist</h6>

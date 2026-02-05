@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Todolist;
 use App\Services\CategoryService;
 use App\Services\TodolistService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -23,9 +24,7 @@ class TodolistController extends Controller
         $this->todolistService = $todolistService;
         $this->categoryService = $categoryService;
     }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(): Response
     {
         $todolist = $this->todolistService->getTodolists();
@@ -35,9 +34,7 @@ class TodolistController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create(): Response
     {
         $categories = $this->categoryService->getCategories();
@@ -47,83 +44,66 @@ class TodolistController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(TodolistRequest $request): RedirectResponse
     {
-        Log::info('store data todolist', [
-            'user_id' => Auth::user()->id,
-            'data' => $request->all()
-        ]);
-        $this->todolistService->saveTodolist($request->only([
-            'todo',
-            'description',
-            'category_id'
-        ]));
+        try {
+            Log::info('store data todolist', [
+                'user_id' => Auth::user()->id,
+                'data' => $request->all()
+            ]);
 
-        return response()->redirectToRoute('todolist.index');
-        // if ($store) {
-        //     return response()->redirectToRoute('todolist.index');
-        // } else {
-        //     return response()->redirectToAction(TodolistController::class, 'create');
-        // }
+            $this->todolistService->saveTodolist($request->validated());
+
+            return to_route('todolist.index')->with('success', 'Todolist created successfully!');
+        } catch (Exception $e) {
+
+            Log::error('Todolist created failed', [
+                'message' => $e->getMessage()
+            ]);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Todolist create faliled');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(int $id): Response
     {
-        $todolist = $this->todolistService->getTodolistById($id);
-        $categories = $this->categoryService->getCategories();
-
         return response()->view('todolist.edit', [
-            'title' => 'Hamalan Edit Todolist',
-            'todolist' => $todolist,
-            'categories' => $categories
+            'title' => 'Halaman Edit Todolist',
+            'todolist' => $this->todolistService->getTodolistById($id),
+            'categories' => $this->categoryService->getCategories()
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(TodolistRequest $request, int $id): RedirectResponse
     {
-        $this->todolistService->updateTodolist($id, $request->only([
-            'todo',
-            'description',
-            'category_id'
-        ]));
+        try {
+            $this->todolistService->updateTodolist($id, $request->validated());
+            return to_route('todolist.index')->with('success', 'Todolist  update successfully!');
+        } catch (Exception $e) {
 
-        // $todo = Todolist::find($id);
-        // $todo->update([
-        //     'todo' => $request->input('todo'),
-        //     'category_id' => $request->input('category_id'),
-        //     'description' => $request->input('description'),
-        // ]);
-
-        return response()->redirectToRoute('todolist.index');
+            Log::error('Todolist update failed', [
+                'message' => $e->getMessage()
+            ]);
+            return redirect()->back()->with('error', 'Todolist update faliled');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id)
+
+    public function destroy(int $id): RedirectResponse
     {
-        // $todo = Todolist::find($id);
-        // $todo->delete();
+        try {
+            $this->todolistService->removeTodolist($id);
+            return redirect()->back()->with('success', 'Todolist deleted successfully');
+        } catch (Exception $e) {
 
-        $this->todolistService->removeTodolist($id);
-
-        return response()->redirectToRoute('todolist.index');
+            Log::error('Todolist deleted failed', [
+                'message' => $e->getMessage()
+            ]);
+            return redirect()->back()->with('error', 'Todolist deleted faliled');
+        }
     }
 }
