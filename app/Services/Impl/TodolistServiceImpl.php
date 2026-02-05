@@ -10,7 +10,7 @@ class TodolistServiceImpl implements TodolistService
 {
     public function getTodolists()
     {
-        return Todolist::all();
+        return Todolist::latest()->get();
     }
 
     public function saveTodolist(array $data)
